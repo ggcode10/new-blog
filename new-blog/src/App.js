@@ -1,62 +1,21 @@
-import { useState } from 'react'
-import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import BlogForm from './components/BlogForm';
+import NavBar from './components/NavBar';
 function App() {
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const onSubmit = () => {
-    axios.post('http://localhost:3001/posts', {
-      title,
-      body
-    })
-  }
+
   return (
     <Router>
-      <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-          <Link class="navbar-brand" to="/">Home</Link>
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <Link class="nav-link active" aria-current="page" to="/blogs">Blogs</Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <Switch>
-        <Route path="/" exact>
-          HomePage
-        </Route>
-        <Route path="/blogs" exact>
-          <div className='container'>
-            <h1>Create a blog post</h1>
-            <div className='mb-3'>
-              <label className='form-lable'>Title</label>
-              <input className='form-control'
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value)
-                }}
-              />
-            </div>
-            <div className='mb-3'>
-              <label className='form-lable'>Body</label>
-              <textarea
-                className='form-control'
-                value={body}
-                onChange={(e) => {
-                  setBody(e.target.value)
-                }}
-                rows="20"
-              />
-            </div>
-            <button
-              onClick={onSubmit}
-              className='btn btn-primary'
-            >Post</button>
-          </div>
-        </Route>
-      </Switch>
+      <NavBar />
+      <div className='container'>
+        <Switch>
+          <Route path="/" exact>
+            HomePage
+          </Route>
+          <Route path="/blogs" exact>
+            <BlogForm />
+          </Route>
+        </Switch>
+      </div>
     </Router>
   );
 }

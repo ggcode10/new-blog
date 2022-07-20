@@ -9,7 +9,7 @@ const ListPage = () => {
     const [posts, setPosts] = useState([])
 
     const getPosts = () => {
-        axios.get('http://localhost:3001/posts').then((res) => {
+        axios.get('http://localhost:3000/posts').then((res) => {
             // console.log(res.data);
             setPosts(res.data)
         })
@@ -33,7 +33,12 @@ const ListPage = () => {
                     <Card
                         key={post.id}
                         title={post.title}
-                        onClick={() => history.push('/blogs/edit')} />
+                        onClick={() => history.push('/blogs/edit')}>
+                        <div>
+                            <button className='btn btn-danger btn-sm'
+                                onClick={() => console.log('Delete')}>Delete</button>
+                        </div>
+                    </Card>
                 )
             })}
         </div>

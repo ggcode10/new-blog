@@ -4,7 +4,7 @@ const BlogForm = () => {
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const onSubmit = () => {
-        axios.post('http://localhost:3001/posts', {
+        axios.post('http://localhost:3000/posts', {
             title,
             body
         })

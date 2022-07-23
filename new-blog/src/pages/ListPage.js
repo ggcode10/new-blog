@@ -40,7 +40,7 @@ const ListPage = () => {
         }
 
         if (posts.length === 0) {
-            return (<div>'No blog posts found'</div>)
+            return (<div>No blog posts found</div>)
         }
 
         return posts.map(post => {
@@ -71,7 +71,7 @@ const ListPage = () => {
                     </Link>
                 </div>
             </div>
-            {renderBlogList}
+            {renderBlogList()}
         </div >
     )
 };

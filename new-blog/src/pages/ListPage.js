@@ -7,11 +7,13 @@ import { useHistory } from 'react-router';
 const ListPage = () => {
     const history = useHistory();
     const [posts, setPosts] = useState([])
+    const [loading, setLoading] = useState(true);
 
     const getPosts = () => {
         axios.get('http://localhost:3000/posts').then((res) => {
             // console.log(res.data);
             setPosts(res.data)
+            setLoading(false);
         })
     }
 
@@ -26,6 +28,39 @@ const ListPage = () => {
         getPosts();
     }, []);
 
+    const renderBlogList = () => {
+        if (loading) {
+            return (
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            )
+        }
+
+        if (posts.length === 0) {
+            return (<div>'No blog posts found'</div>)
+        }
+
+        return posts.map(post => {
+            return (
+                <Card
+                    key={post.id}
+                    title={post.title}
+                    onClick={() => history.push('/blogs/edit')}>
+                    <div>
+                        <button
+                            className='btn btn-danger btn-sm'
+                            onClick={(e) => deleteBlog(e, post.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </Card>
+            )
+        })
+    }
     return (
         <div>
             <div className='d-flex justify-content-between'>
@@ -36,23 +71,7 @@ const ListPage = () => {
                     </Link>
                 </div>
             </div>
-            {posts.length > 0 ? posts.map(post => {
-                return (
-                    <Card
-                        key={post.id}
-                        title={post.title}
-                        onClick={() => history.push('/blogs/edit')}>
-                        <div>
-                            <button
-                                className='btn btn-danger btn-sm'
-                                onClick={(e) => deleteBlog(e, post.id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </Card>
-                )
-            }) : 'No blog posts found'}
+            {renderBlogList}
         </div >
     )
 };

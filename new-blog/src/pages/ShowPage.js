@@ -34,7 +34,7 @@ const ShowPage = () => {
                 <h1 className='flex-grow-1'>{post.title}</h1>
                 <div>
                     <Link className='btn btn-primary'
-                        to={`blogs/${id}/edit`}
+                        to={`/blogs/${id}/edit`}
                     >
                         Edit
                     </Link>

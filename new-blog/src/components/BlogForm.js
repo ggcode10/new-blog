@@ -1,24 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
+import { bool } from 'prop-types';
 
-const BlogForm = () => {
+const BlogForm = ({ editing }) => {
     const history = useHistory();
+    const { id } = useParams();
 
     const [title, setTitle] = useState('');
+    const [originalTitle, setOriginalTitle] = useState('');
     const [body, setBody] = useState('');
+    const [originalbody, setOriginalBody] = useState('');
+
+    useEffect(() => {
+        if (editing) {
+            axios.get(`http://localhost:3000/posts/${id}`).then(res => {
+                setTitle(res.data.title);
+                setOriginalTitle(res.data.title);
+                setBody(res.data.body);
+                setOriginalBody(res.data.body);
+            })
+        }
+    }, [id, editing]);
+
+    const isEdited = () => {
+        console.log('a');
+        return title !== originalTitle || body !== originalbody
+    }
+
     const onSubmit = () => {
-        axios.post('http://localhost:3000/posts', {
-            title,
-            body,
-            createdAt: Date.now()
-        }).then(() => {
-            history.push('/blogs')
-        })
+        if (editing) {
+            axios.patch(`http://localhost:3000/posts/${id}`, {
+                title: title,
+                body: body,
+            }).then(res => {
+                console.log(res)
+                history.push(`/blogs/${id}`)
+            })
+        } else {
+            axios.post('http://localhost:3000/posts', {
+                title,
+                body,
+                createdAt: Date.now()
+            }).then(() => {
+                history.push('/blogs')
+            })
+        }
     }
     return (
         <div>
-            <h1>Create a blog post</h1>
+            <h1>{editing ? 'Edit' : 'Create'} a blog post</h1>
             <div className='mb-3'>
                 <label className='form-lable'>Title</label>
                 <input className='form-control'
@@ -36,15 +67,25 @@ const BlogForm = () => {
                     onChange={(e) => {
                         setBody(e.target.value)
                     }}
-                    rows="20"
+                    rows="10"
                 />
             </div>
             <button
                 onClick={onSubmit}
+                disabled={editing}
                 className='btn btn-primary'
-            >Post</button>
+            >{editing ? 'Edit' : 'Post'}
+            </button>
         </div>
     )
 };
+
+BlogForm.propTypes = {
+    editing: bool
+}
+
+BlogForm.defaultProps = {
+    editing: false
+}
 
 export default BlogForm;

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { Link } from 'react-router-dom';
 
 const ShowPage = () => {
     const { id } = useParams();
@@ -29,7 +30,16 @@ const ShowPage = () => {
 
     return (
         <div>
-            <h1>{post.title}</h1>
+            <div className='d-flex'>
+                <h1 className='flex-grow-1'>{post.title}</h1>
+                <div>
+                    <Link className='btn btn-primary'
+                        to={`blogs/${id}/edit`}
+                    >
+                        Edit
+                    </Link>
+                </div>
+            </div>
             <small className='text-muted'>
                 Created At: {printDate(post.createdAt)}
             </small>

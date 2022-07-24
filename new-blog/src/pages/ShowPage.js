@@ -17,7 +17,11 @@ const ShowPage = () => {
 
     useEffect(() => {
         getPost(id)
-    }, [])
+    }, [id])
+
+    const printDate = (timestamp) => {
+        return new Date(timestamp).toLocaleString();
+    }
 
     if (loading) {
         return <LoadingSpinner />
@@ -26,6 +30,10 @@ const ShowPage = () => {
     return (
         <div>
             <h1>{post.title}</h1>
+            <small className='text-muted'>
+                Created At: {printDate(post.createdAt)}
+            </small>
+            <hr />
             <p>{post.body}</p>
         </div>
     )
